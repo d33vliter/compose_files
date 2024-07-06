@@ -1,0 +1,16 @@
+version: '3.9'
+
+services:
+  oraclelinux:
+    image: oraclelinux:7.9
+    container_name: oraclelinux7.9
+    tty: true
+    stdin_open: true
+    volumes:
+      - ./data:/data
+    networks:
+      - oraclelinux-network
+
+networks:
+  oraclelinux-network:
+    driver: bridge
