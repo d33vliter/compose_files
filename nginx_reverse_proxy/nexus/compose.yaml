@@ -1,0 +1,18 @@
+version: '3'
+services:
+  nexus:
+    image: sonatype/nexus3
+    container_name: nexus
+    ports:
+      - "8081:8081"
+    volumes:
+      - nexus-data:/nexus-data
+    networks:
+      - nginx_net
+
+volumes:
+  nexus-data:
+
+networks:
+  nginx_net:
+    external: true
