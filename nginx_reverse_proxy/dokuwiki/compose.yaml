@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  dokuwiki:
+      image: lscr.io/linuxserver/dokuwiki:latest
+      container_name: dokuwiki
+      ports:
+        - "8080:80"
+      networks:
+        - nginx_net
+
+networks:
+  nginx_net:
+    external: true
