@@ -4,8 +4,8 @@ services:
   dokuwiki:
       image: lscr.io/linuxserver/dokuwiki:latest
       container_name: dokuwiki
-      ports:
-        - "8080:80"
+      #ports:
+      #  - "8080:80"
       networks:
         - nginx_net
 
