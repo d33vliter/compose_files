@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  keycloak:
+    image: keycloak/keycloak:24.0
+    command: start
+    container_name: keycloak1
+    environment:
+      KC_HOSTNAME_PORT: 8080
+      KC_HOSTNAME_STRICT_BACKCHANNEL: false
+      KC_HTTP_ENABLED: true
+      KC_HOSTNAME_STRICT_HTTPS: false
+      KC_HEALTH_ENABLED: true
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      KC_HOSTNAME_ADMIN_URL: "http://localhost/keycloak"
+      KC_HOSTNAME_URL: "http://localhost/keycloak"
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres/${POSTGRES_DB}
+      KC_DB_USERNAME: ${POSTGRES_USER}
+      KC_DB_PASSWORD: ${POSTGRES_PASSWORD}
+      KC_HTTP_RELATIVE_PATH: /keycloak
+      # KC_PROXY_HEADERS: "forwarded,xforwarded" 
+      KC_PROXY_PROTOCOL_ENABLED: true
+      KC_PROXY_TRUSTED_ADDRESSES: 172.21.0.0/16
+      KC_COOKIE_SAMESITE: "None"
+      KC_PROXY: 'edge'
+    ports:
+      - 8080:8080
+    restart: always
+    networks:
+      - keycloak_network
+
+networks:
+  keycloak_network:
+    external: true
+
