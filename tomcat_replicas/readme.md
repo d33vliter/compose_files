@@ -1,7 +1,7 @@
 # replicas
 
 
-dentro del compose existira 20 replicas de tomcat y servicios distintos para hacer reverse proxy:
+Dentro del compose existira 20 replicas de tomcat y servicios distintos para hacer reverse proxy:
 
 - nginx 81
 - haproxy 82
