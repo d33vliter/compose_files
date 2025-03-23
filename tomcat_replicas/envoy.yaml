@@ -1,0 +1,44 @@
+admin:
+  address:
+    socket_address: { address: 127.0.0.1, port_value: 9901 }
+
+static_resources:
+  listeners:
+  - name: listener_0
+    address:
+      socket_address: { address: 0.0.0.0, port_value: 80 }
+    filter_chains:
+    - filters:
+      - name: envoy.filters.network.http_connection_manager
+        typed_config:
+          "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
+          stat_prefix: ingress_http
+          codec_type: AUTO
+          route_config:
+            name: local_route
+            virtual_hosts:
+            - name: local_service
+              domains: ["*"]
+              routes:
+              - match: { prefix: "/" }
+                route: { cluster: tomcat_service }
+          http_filters:
+          - name: envoy.filters.http.router
+            typed_config:
+              "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
+
+  clusters:
+  - name: tomcat_service
+    connect_timeout: 0.25s
+    type: STRICT_DNS  # Utilizamos DNS para que Docker resuelva el servicio
+    lb_policy: ROUND_ROBIN  # Balanceo de carga entre las réplicas
+    dns_lookup_family: V4_ONLY  # O V6_ONLY si prefieres IPv6
+    load_assignment:
+      cluster_name: tomcat_service
+      endpoints:
+        - lb_endpoints:
+            - endpoint:
+                address:
+                  socket_address:
+                    address: tomcat  # Este es el nombre del servicio en Docker Compose
+                    port_value: 8080  # Puerto donde están expuestos los Tomcat
